@@ -34,6 +34,7 @@ let scoreElement = document.querySelector(".score");
 let scoreEl = document.querySelector("#scoreEl");
 let questionNumber = document.querySelector("#Quest");
 let playAgainBtn = document.querySelector(".playAgainBtn");
+let allBar = document.querySelectorAll(".bar");
 
 let totalQuestions = questions.length;
 let currentQuestionIndex = 0;
@@ -42,30 +43,35 @@ let score = 0;
 
 updateQuestion(currentQuestionIndex);
 
-
+let optionSelected = false;
 allChoices.forEach((choice, i) => {
     choice.addEventListener('click', function(e) {
-        let selectedAnswer = i + 1; 
+        if (!optionSelected) {
+            let selectedAnswer = i + 1; 
 
-        if (selectedAnswer === questions[currentQuestionIndex].answer) {
-            e.target.style.backgroundColor = "green";
-            score += 10;
-            scoreEl.innerText = score;
-        } else {
-            e.target.style.backgroundColor = "red";
-        }
-
-        
-        setTimeout(function() {
-            e.target.style.backgroundColor = "white"; 
-
-            currentQuestionIndex++;
-            if (currentQuestionIndex < totalQuestions) {
-                updateQuestion(currentQuestionIndex);
+            if (selectedAnswer === questions[currentQuestionIndex].answer) {
+                e.target.style.backgroundColor = "green";
+                score += 10;
+                scoreEl.innerText = score;
             } else {
-                showGameOver();
+                e.target.style.backgroundColor = "red";
             }
-        }, 1000);
+
+            optionSelected = true;
+
+            setTimeout(function() {
+                allChoices.forEach(choice => choice.style.backgroundColor = "white");
+                optionSelected = false;
+                currentQuestionIndex++;
+                questionNumber.innerText = "Question " + (currentQuestionIndex+1) +"/3";
+
+                if (currentQuestionIndex < totalQuestions) {
+                    updateQuestion(currentQuestionIndex);
+                } else {
+                    showGameOver();
+                }
+            }, 1000);
+        }
     });
 });
 
@@ -83,6 +89,7 @@ function showGameOver() {
 }
 playAgainBtn.addEventListener('click', function() {
     currentQuestionIndex = 0;
+    questionNumber.innerText = "Question " + (currentQuestionIndex+1) +"/3";
     score = 0;
     scoreEl.innerText = score;
     gameOverPage.style.display = 'none';
