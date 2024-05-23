@@ -58,7 +58,6 @@ allChoices.forEach((choice, i) => {
             }
 
             optionSelected = true;
-
             setTimeout(function() {
                 allChoices.forEach(choice => choice.style.backgroundColor = "white");
                 optionSelected = false;
@@ -67,6 +66,7 @@ allChoices.forEach((choice, i) => {
 
                 if (currentQuestionIndex < totalQuestions) {
                     updateQuestion(currentQuestionIndex);
+                    updateProgressBar(currentQuestionIndex);
                 } else {
                     showGameOver();
                 }
@@ -74,7 +74,9 @@ allChoices.forEach((choice, i) => {
         }
     });
 });
-
+function updateProgressBar(index){
+    allBar[index].style.backgroundColor = "#067cf1";
+}
 function updateQuestion(index) {
     Ques.innerText = questions[index].question;
     allChoices.forEach((choice, i) => {
@@ -95,7 +97,11 @@ playAgainBtn.addEventListener('click', function() {
     gameOverPage.style.display = 'none';
     gamePage.style.display = 'flex';
     updateQuestion(currentQuestionIndex);
+    for(var i = 1;i<allBar.length;i++){
+        allBar[i].style.backgroundColor = "white";
+    }
 });
+
 
 
 
